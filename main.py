@@ -22,11 +22,11 @@ def setup():
 
 setup()
 
-query = f"""
+query = """
 query EnrichTimelineQuery($id: String!, $features: [String]!, $defs: [Def]!, $start: DateTime!, $end: DateTime!) {{
   timeline(id: $id) {{
     enrich(
-      branch: "{BRANCH_NAME}"
+      branch: "{0}"
       features: $features
       defs: $defs
       filters: []
@@ -43,7 +43,7 @@ query EnrichTimelineQuery($id: String!, $features: [String]!, $defs: [Def]!, $st
     }}
   }}
 }}
-"""
+""".format(BRANCH_NAME)
 
 default_value = st.experimental_get_query_params().get("scowl", ["CountUnique(user by ip)"])[0]
 scowl = st.text_input(label="Scowl Expression", value=default_value)
