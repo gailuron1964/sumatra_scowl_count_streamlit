@@ -2,6 +2,7 @@ import textwrap
 from sumatra import Client
 import streamlit as st
 import pandas as pd
+from style import customize_styling
 
 BRANCH_NAME = "tmp_workshop"
 
@@ -44,7 +45,8 @@ query EnrichTimelineQuery($id: String!, $features: [String]!, $defs: [Def]!, $st
 }}
 """
 
-scowl = st.text_input(label="Scowl Expression", value="CountUnique(user by ip)")
+default_value = st.experimental_get_query_params().get("scowl", ["CountUnique(user by ip)"])[0]
+scowl = st.text_input(label="Scowl Expression", value=default_value)
 
 variables = {
   'id': 'attack',
@@ -66,3 +68,5 @@ else:
     cols[name] = feature['values']
   df = pd.DataFrame(cols, index=ret['data']['timeline']['enrich']['times'])[['ip', 'user', scowl]]
   st.write(df)
+
+customize_styling()
